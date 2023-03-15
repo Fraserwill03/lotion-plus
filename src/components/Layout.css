@@ -1,0 +1,28 @@
+.main-section {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  /* height: calc(100% - 66px); */
+}
+.layout {
+  height: calc(100% - 66px);
+}
+
+.editor {
+  flex: 3;
+}
+
+.content-wrapper {
+  display: flex;
+  flex: 3;
+  flex-direction: column;
+  height: 100%;
+}
+
+.menu-spacer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(136, 138, 140);
+  font-size: 1.5em;
+}

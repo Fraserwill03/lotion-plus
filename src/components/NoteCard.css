@@ -1,0 +1,14 @@
+.note-wrapper {
+  padding: 10px;
+}
+
+.note:hover {
+  background-color: #483c54;
+  color: white;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #483c54;
+  color: white;
+}

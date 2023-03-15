@@ -1,0 +1,99 @@
+.editor {
+  flex: 3;
+  height: calc(100% - 42px);
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.header-section div {
+  font-size: 1.2rem;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  height: 75px;
+  align-items: center;
+}
+
+.input-block {
+  display: flex;
+  flex-direction: column;
+  flex: 4;
+  height: 100%;
+  justify-content: space-evenly;
+  padding-left: 10px;
+}
+
+.title-input {
+  border: none;
+  text-align: left;
+  font-size: 1.5rem;
+}
+
+.title-input:focus {
+  outline: none;
+}
+
+.date-input {
+  border: none;
+  width: 175px;
+}
+
+.date-input:focus {
+  outline: none;
+}
+
+.quill {
+  height: calc(100% - 66px);
+  /* max-height: 100%; */
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-toolbar.ql-snow {
+  border-left: none;
+  border-right: none;
+}
+
+.btns {
+  display: flex;
+  height: 100%;
+  flex: 1;
+  justify-content: right;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .btns {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+.btn {
+  height: 100%;
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor .btn:hover {
+  background-color: #483c54;
+  color: white;
+  cursor: pointer;
+}
+
+.ql-editor {
+  border-left: none;
+}

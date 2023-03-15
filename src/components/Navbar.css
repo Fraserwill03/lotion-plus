@@ -1,0 +1,42 @@
+nav {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  border-top: 5px solid #483c54;
+  border-bottom: 1px solid #c3c2c4;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+}
+
+h1 {
+  font-size: 35px;
+}
+
+.wrapper {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.burger {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+}
+
+.burger:hover {
+  cursor: pointer;
+  background-color: #483c54;
+  color: white;
+}

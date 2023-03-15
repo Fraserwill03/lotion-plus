@@ -2,5 +2,5 @@
 
 Put your names and UCIDs here:
 
-- Member #1: Name -- UCID
-- Member #2: Name -- UCID
+- Member #1: Aarsh Shah -- 30150079
+- Member #2: William Fraser -- UCID
