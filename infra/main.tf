@@ -23,7 +23,27 @@ locals {
 # Create an S3 bucket
 # if you omit the name, Terraform will assign a random name to it
 # see the docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
-resource "aws_s3_bucket" "lambda" {}
+# read the docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table
+resource "aws_dynamodb_table" "notes" {
+  name         = "notes"
+  billing_mode = "PROVISIONED"
+
+  # up to 8KB read per second (eventually consistent)
+  read_capacity = 1
+
+  # up to 1KB per second
+  write_capacity = 1
+
+  # we only need a student id to find an item in the table; therefore, we 
+  # don't need a sort key here
+  hash_key = "note_id"
+
+  # the hash_key data type is string
+  attribute {
+    name = "note_id"
+    type = "N"
+  }
+}
 
 # create a role for the Lambda function to assume
 # every service on AWS that wants to call other AWS services should first assume a role and
@@ -95,6 +115,6 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
 }
 
 # output the name of the bucket after creation
-output "bucket_name" {
+output "notes_bucket" {
   value = aws_s3_bucket.lambda.bucket
 }
