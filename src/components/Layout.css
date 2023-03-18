@@ -26,3 +26,28 @@
   color: rgb(136, 138, 140);
   font-size: 1.5em;
 }
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.login {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  width: 300px;
+  border-radius: 10px;
+  border: solid 1px rgb(136, 138, 140);
+}
+
+.login:hover {
+  background-color: #483c54;
+  color: white;
+}
+

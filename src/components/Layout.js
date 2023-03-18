@@ -5,6 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+
 import Menu from "./Menu";
 import "../components/Layout.css";
 
@@ -23,6 +26,36 @@ function Layout() {
   const [currNote, setCurrNote] = useState(
     notes.find((note) => note.index === parseInt(index))
   );
+
+  const [ user, setUser ] = useState([]);
+  const [ profile, setProfile ] = useState([]);
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login failed: ', error),
+  })
+
+  useEffect(() => {
+    if (user) {
+      axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${user.accessToken}`, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+          Accept: 'application/json'
+        }
+      })
+      .then ((res) => {
+        setProfile(res.data);
+      })
+      .catch((err) => console.log(err));
+      }
+    },
+    [user]
+  );
+
+  const logoutHandler = () => {
+    googleLogout();
+    setProfile(null);
+  };
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -156,7 +189,8 @@ function Layout() {
 
   return (
     <div className="layout">
-      <Navbar menuHandler={menuHandler} />
+      <Navbar menuHandler={menuHandler} profile={profile} logout={logoutHandler}/>
+      {profile ? (
       <section className="main-section">
         {menu ? (
           <Menu
@@ -187,6 +221,16 @@ function Layout() {
           </div>
         </div>
       </section>
+      ) : (
+        <section className="login-page">
+          <div className="login" onClick={() => login()}>Sign in to Lotion with <img 
+            src="https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png" 
+            alt="Colorful Google Logo transparent clipart download @transparentpng.com"
+            width={40} 
+            height={40}/>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
