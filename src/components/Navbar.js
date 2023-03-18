@@ -14,7 +14,7 @@ function Navbar(props) {
         <p>Like Notion, but worse.</p>
       </div>
       {profile ? (
-        <div className="active-user">{profile.email}(<p className="logout" onClick={logout}>Log out</p>)</div>
+        <div className="active-user">{profile.email} (<p className="logout" onClick={logout}>Log out</p>)</div>
       ) : (
         <div className="spacer"></div>
       )}

@@ -37,7 +37,7 @@ function Layout() {
 
   useEffect(() => {
     if (user) {
-      axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${user.accessToken}`, {
+      axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${user.access_token}`, {
         headers: {
           Authorization: `Bearer ${user.accessToken}`,
           Accept: 'application/json'
