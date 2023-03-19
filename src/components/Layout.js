@@ -27,8 +27,8 @@ function Layout() {
     notes.find((note) => note.index === parseInt(index))
   );
 
-  const [ user, setUser ] = useState([]);
-  const [ profile, setProfile ] = useState([]);
+  const [ user, setUser ] = useState();
+  const [ profile, setProfile ] = useState();
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
