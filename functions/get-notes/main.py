@@ -6,11 +6,10 @@ import boto3
 
 def get_handler(event, context):
     try:
-        # create a dynamodb client
-        dynamodb = boto3.client('dynamodb')
-        # get all the notes from the database
-        # dynamodb.scan()
-        # return a success message
+        print(event)
+
+        dynamodb_resouce = boto3.resource('dynamodb')
+        table = dynamodb_resouce.table("lotion-30158991")
         return {
             'statusCode': 200,
             'body': json.dumps('Notes retrieved successfully!')

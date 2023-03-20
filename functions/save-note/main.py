@@ -6,11 +6,10 @@ import boto3
 
 def save_handler(event, context):
     try:
-        # create a dynamodb client
-        dynamodb = boto3.client('dynamodb')
-        # insert the note object into the database
-        # dynamodb.put_item()
-        # return a success message
+        print(event)
+        dynamodb_resouce = boto3.resource('dynamodb')
+        table = dynamodb_resouce.table("lotion-30158991")
+
         return {
             'statusCode': 200,
             'body': json.dumps('Note saved successfully!')

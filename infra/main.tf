@@ -14,6 +14,8 @@ provider "aws" {
 
 
 
+# Create an S3 bucket
+resource "aws_s3_bucket" "lambda" {}
 
 # the locals block is used to declare constants that 
 # you can use throughout your code
@@ -58,8 +60,6 @@ resource "aws_iam_role" "lambda" {
 EOF
 }
 
-# Create an S3 bucket
-resource "aws_s3_bucket" "lambda" {}
 
 # create a Lambda function
 # see the docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function
@@ -122,27 +122,6 @@ resource "aws_dynamodb_table" "lotion-30158991" {
     name = "id"
     type = "S"
   }
-
-
-  #   attribute {
-  #     name = "title"
-  #     type = "S"
-  #   }
-  #   attribute {
-  #     name = "time"
-  #     type = "S"
-  #   }
-
-  #   attribute {
-  #     name = "content"
-  #     type = "S"
-  #   }
-
-  #   attribute {
-  #     name = "int"
-  #     type = "N"
-  #   }
-
 
 }
 
