@@ -14,8 +14,6 @@ provider "aws" {
 
 
 
-# Create an S3 bucket
-resource "aws_s3_bucket" "lambda" {}
 
 # the locals block is used to declare constants that 
 # you can use throughout your code
@@ -34,6 +32,8 @@ locals {
 }
 
 
+# Create an S3 bucket
+resource "aws_s3_bucket" "lambda" {}
 
 
 # create a role for the Lambda function to assume
@@ -95,7 +95,7 @@ resource "aws_lambda_function" "delete-note-30150079" {
   runtime = "python3.9"
 }
 
-# read the docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table
+# # read the docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dynamodb_table
 
 resource "aws_dynamodb_table" "lotion-30158991" {
   name         = "lotion-30158991"
@@ -140,6 +140,11 @@ resource "aws_lambda_function_url" "get-notes-url" {
     expose_headers    = ["keep-alive", "date"]
   }
 }
+
+output "get-notes-url" {
+  value = aws_lambda_function_url.get-notes-url.function_url
+}
+
 resource "aws_lambda_function_url" "save-notes-url" {
   function_name      = aws_lambda_function.save-note-30150079.function_name
   authorization_type = "NONE"
@@ -152,6 +157,11 @@ resource "aws_lambda_function_url" "save-notes-url" {
     expose_headers    = ["keep-alive", "date"]
   }
 }
+
+output "save-notes-url" {
+  value = aws_lambda_function_url.save-notes-url.function_url
+}
+
 resource "aws_lambda_function_url" "delete-notes-url" {
   function_name      = aws_lambda_function.delete-note-30150079.function_name
   authorization_type = "NONE"
@@ -163,4 +173,8 @@ resource "aws_lambda_function_url" "delete-notes-url" {
     allow_headers     = ["*"]
     expose_headers    = ["keep-alive", "date"]
   }
+}
+
+output "delete-notes-url" {
+  value = aws_lambda_function_url.delete-notes-url.function_url
 }

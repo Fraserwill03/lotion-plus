@@ -11,6 +11,10 @@ import axios from "axios";
 import Menu from "./Menu";
 import "../components/Layout.css";
 
+const deleteNotesUrl = "https://rgzojs6pyn5ysmtb3tuhne3dhi0yceru.lambda-url.ca-central-1.on.aws/"
+const getNotesUrl = "https://5kn6uekf3b7anelop6gueekwqa0bepnb.lambda-url.ca-central-1.on.aws/"
+const saveNotesUrl= "https://va67rjrqtnqyxpj3zsa6nwnvxi0htabj.lambda-url.ca-central-1.on.aws/"
+
 function Layout() {
   var { index } = useParams();
   const Navigate = useNavigate();
