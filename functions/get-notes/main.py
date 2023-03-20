@@ -6,11 +6,12 @@ import boto3
 
 def get_handler(event, context):
     try:
-        print(event)
-
+        access_token = event['headers']['access_token']
+        email = event['headers']['email']
         dynamodb_resource = boto3.resource("dynamodb")
         # create a dynamodb table object
         table = dynamodb_resource.Table("lotion-30158991")
+
         return {
             'statusCode': 200,
             'body': json.dumps(event)

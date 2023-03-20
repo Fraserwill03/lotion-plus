@@ -11,9 +11,12 @@ import axios from "axios";
 import Menu from "./Menu";
 import "../components/Layout.css";
 
-const deleteNotesUrl = "https://rgzojs6pyn5ysmtb3tuhne3dhi0yceru.lambda-url.ca-central-1.on.aws/"
-const getNotesUrl = "https://5kn6uekf3b7anelop6gueekwqa0bepnb.lambda-url.ca-central-1.on.aws/"
-const saveNotesUrl= "https://va67rjrqtnqyxpj3zsa6nwnvxi0htabj.lambda-url.ca-central-1.on.aws/"
+const deleteNotesUrl =
+  "https://rgzojs6pyn5ysmtb3tuhne3dhi0yceru.lambda-url.ca-central-1.on.aws/";
+const getNotesUrl =
+  "https://5kn6uekf3b7anelop6gueekwqa0bepnb.lambda-url.ca-central-1.on.aws/";
+const saveNotesUrl =
+  "https://va67rjrqtnqyxpj3zsa6nwnvxi0htabj.lambda-url.ca-central-1.on.aws/";
 
 function Layout() {
   var { index } = useParams();
@@ -31,30 +34,51 @@ function Layout() {
     notes.find((note) => note.index === parseInt(index))
   );
 
-  const [ user, setUser ] = useState();
-  const [ profile, setProfile ] = useState();
+  const [user, setUser] = useState();
+  const [profile, setProfile] = useState();
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
-    onError: (error) => console.log('Login failed: ', error),
-  })
+    onError: (error) => console.log("Login failed: ", error),
+  });
 
   useEffect(() => {
     if (user) {
-      axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${user.access_token}`, {
-        headers: {
-          Authorization: `Bearer ${user.accessToken}`,
-          Accept: 'application/json'
-        }
-      })
-      .then ((res) => {
-        setProfile(res.data);
-      })
-      .catch((err) => console.log(err));
-      }
-    },
-    [user]
-  );
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          setProfile(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user && profile) {
+      axios
+        .get(getNotesUrl, {
+          headers: {
+            access_token: user.access_token,
+            email: profile.email,
+          },
+        })
+        .then((res) => {
+          // setNotes(res.data);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [user, profile, notes]);
 
   const logoutHandler = () => {
     googleLogout();
@@ -115,7 +139,9 @@ function Layout() {
         }
         return note;
       })
+      // delete everything above
     );
+
     if (notesUrl) {
       Navigate(`/notes/${updatedNote.index}`);
     } else {
@@ -123,7 +149,7 @@ function Layout() {
     }
   };
 
-  const addHandler = () => {
+  const addHandler = async () => {
     const newNote = {
       id: uuidv4(),
       title: "Untitled",
@@ -131,12 +157,35 @@ function Layout() {
       content: "",
       index: notes.length + 1,
     };
-    setNotes([...notes, newNote]);
-    setCurrNote(newNote);
-    if (notesUrl) {
-      Navigate(`/notes/${newNote.index}/edit`);
-    } else {
-      Navigate(`/${newNote.index}/edit`);
+    try {
+      // axios
+      //   .get(saveNotesUrl, {
+      //     headers: {
+      //       access_token: user.access_token,
+      //       email: profile.email,
+      //       new_note: JSON.stringify(newNote),
+      //     },
+      //   })
+      //   .then((res) => {
+      //     // setNotes(res.data);
+      //     console.log(res.data);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+
+      setNotes([...notes, newNote]);
+      setCurrNote(newNote);
+
+      // need to fix up setNotes and setCurrNote
+
+      if (notesUrl) {
+        Navigate(`/notes/${newNote.index}/edit`);
+      } else {
+        Navigate(`/${newNote.index}/edit`);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -193,45 +242,52 @@ function Layout() {
 
   return (
     <div className="layout">
-      <Navbar menuHandler={menuHandler} profile={profile} logout={logoutHandler}/>
-      {profile ? (
-      <section className="main-section">
-        {menu ? (
-          <Menu
-            selectHandler={selectHandler}
-            notes={notes}
-            setNotes={setNotes}
-            formatDate={formatDate}
-            index={index}
-            addHandler={addHandler}
-          />
-        ) : null}
-
-        <div className="content-wrapper">
-          <div id="content">
-            <Outlet
-              context={[
-                notes,
-                setNotes,
-                formatDate,
-                saveHandler,
-                deleteHandler,
-                currNote,
-                setCurrNote,
-                index,
-                editHandler,
-              ]}
+      <Navbar
+        menuHandler={menuHandler}
+        profile={profile}
+        logout={logoutHandler}
+      />
+      {profile && notes ? (
+        <section className="main-section">
+          {menu ? (
+            <Menu
+              selectHandler={selectHandler}
+              notes={notes}
+              setNotes={setNotes}
+              formatDate={formatDate}
+              index={index}
+              addHandler={addHandler}
             />
+          ) : null}
+
+          <div className="content-wrapper">
+            <div id="content">
+              <Outlet
+                context={[
+                  notes,
+                  setNotes,
+                  formatDate,
+                  saveHandler,
+                  deleteHandler,
+                  currNote,
+                  setCurrNote,
+                  index,
+                  editHandler,
+                ]}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       ) : (
         <section className="login-page">
-          <div className="login" onClick={() => login()}>Sign in to Lotion with <img 
-            src="https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png" 
-            alt="Colorful Google Logo transparent clipart download @transparentpng.com"
-            width={40} 
-            height={40}/>
+          <div className="login" onClick={() => login()}>
+            Sign in to Lotion with{" "}
+            <img
+              src="https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png"
+              alt="Colorful Google Logo transparent clipart download @transparentpng.com"
+              width={40}
+              height={40}
+            />
           </div>
         </section>
       )}

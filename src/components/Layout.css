@@ -49,5 +49,5 @@
 .login:hover {
   background-color: #483c54;
   color: white;
+  cursor: pointer;
 }
-

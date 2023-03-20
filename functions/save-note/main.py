@@ -7,6 +7,7 @@ import boto3
 def save_handler(event, context):
     try:
         print(event)
+
         dynamodb_resouce = boto3.resource('dynamodb')
         table = dynamodb_resouce.Table("lotion-30158991")
 
