@@ -109,37 +109,39 @@ resource "aws_dynamodb_table" "lotion-30158991" {
 
   # we only need a student id to find an item in the table; therefore, we 
   # don't need a sort key here
-  hash_key = "access_token"
-  sort_key = "id"
+  hash_key  = "access_token"
+  range_key = "id"
 
-  # the hash_key data type is string
-  attribute {
-    name = "id"
-    type = "S"
-  }
+
+  # the hash_key data type is string 
   attribute {
     name = "access_token"
     type = "S"
   }
-
   attribute {
-    name = "title"
-    type = "S"
-  }
-  attribute {
-    name = "time"
+    name = "id"
     type = "S"
   }
 
-  attribute {
-    name = "content"
-    type = "S"
-  }
 
-  attribute {
-    name = "int"
-    type = "N"
-  }
+  #   attribute {
+  #     name = "title"
+  #     type = "S"
+  #   }
+  #   attribute {
+  #     name = "time"
+  #     type = "S"
+  #   }
+
+  #   attribute {
+  #     name = "content"
+  #     type = "S"
+  #   }
+
+  #   attribute {
+  #     name = "int"
+  #     type = "N"
+  #   }
 
 
 }
