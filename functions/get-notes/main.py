@@ -8,11 +8,12 @@ def get_handler(event, context):
     try:
         print(event)
 
-        dynamodb_resouce = boto3.resource('dynamodb')
-        table = dynamodb_resouce.table("lotion-30158991")
+        dynamodb_resource = boto3.resource("dynamodb")
+        # create a dynamodb table object
+        table = dynamodb_resource.Table("lotion-30158991")
         return {
             'statusCode': 200,
-            'body': json.dumps('Notes retrieved successfully!')
+            'body': json.dumps(event)
         }
     except Exception as e:
         return {
