@@ -140,7 +140,7 @@ function Layout() {
 
   const saveHandler = async (updatedNote) => {
     try {
-      axios
+      await axios
         .post(
           saveNotesUrl,
           {
@@ -206,9 +206,11 @@ function Layout() {
     if (answer) {
       try {
         //_________
-        axios
-          .delete(saveNotesUrl, {
+        await axios
+          .delete(deleteNotesUrl, {
             headers: {
+              "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+              "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
               access_token: user.access_token,
               email: profile.email,
               note_id: id,
