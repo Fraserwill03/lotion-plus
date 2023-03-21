@@ -22,5 +22,5 @@ def delete_handler(event, context):
     except Exception as e:
         return {
             'statusCode': 401,
-            'body': json.dumps('Error deleting note: ' + str(e))
+            'body': json.dumps(f'Error deleting note: {str(e)}'),
         }

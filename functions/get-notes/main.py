@@ -9,7 +9,7 @@ def get_handler(event, context):
         access_token = event['headers']['access_token']
         email = event['headers']['email']
         dynamodb = boto3.resource("dynamodb")
-        # create a dynamodb table object
+
         response = dynamodb.batch_get_item(
             RequestItems={
                 'lotion-30158991': {

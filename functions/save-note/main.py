@@ -6,16 +6,22 @@ import boto3
 
 def save_handler(event, context):
     try:
+        access_token = event['headers']['access_token']
+        email = event['headers']['email']
         note_data = json.loads(event['body'])
+
+        instance_to_save = {'access_token': access_token,
+                            'email': email, **note_data}
+
         dynamodb_resouce = boto3.resource('dynamodb')
         table = dynamodb_resouce.Table("lotion-30158991")
         response = table.put_item(
-            Item=note_data
+            Item=instance_to_save
         )
 
         return {
             'statusCode': 200,
-            'body': {'response': 'Note saved successfully',
+            'body': {'response': f'Note saved successfully. Response: {response}',
                      'event': json.dump(event),
                      }
         }

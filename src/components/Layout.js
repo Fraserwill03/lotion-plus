@@ -82,7 +82,7 @@ function Layout() {
           },
         })
         .then((res) => {
-          // setNotes(res.data);
+          // setNotes(res.data.notes); // might need to change this to parse data better
           console.log(res.data);
         })
         .catch((err) => {
