@@ -139,47 +139,45 @@ function Layout() {
   };
 
   const saveHandler = async (updatedNote) => {
-    try {
-      await axios
-        .post(
-          saveNotesUrl,
-          {
-            new_note: updatedNote,
+    await axios
+      .post(
+        saveNotesUrl,
+        {
+          new_note: updatedNote,
+        },
+        {
+          headers: {
+            access_token: user.access_token,
+            email: profile.email,
           },
-          {
-            headers: {
-              access_token: user.access_token,
-              email: profile.email,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-        });
-
-      let noteIndex;
-      for (let i = 0; i < notes.length; i++) {
-        if (notes[i].id === updatedNote.id) {
-          noteIndex = i;
         }
-      }
-      setNotes(
-        notes.map((note) => {
-          if (note.id === updatedNote.id) {
-            return updatedNote;
+      )
+      .then((res) => {
+        console.log(res.data);
+        let noteIndex;
+        for (let i = 0; i < notes.length; i++) {
+          if (notes[i].id === updatedNote.id) {
+            noteIndex = i;
           }
-          return note;
-        })
-      );
+        }
+        setNotes(
+          notes.map((note) => {
+            if (note.id === updatedNote.id) {
+              return updatedNote;
+            }
+            return note;
+          })
+        );
 
-      if (notesUrl) {
-        Navigate(`/notes/${updatedNote.index}`);
-      } else {
-        Navigate(`/${updatedNote.index}`);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+        if (notesUrl) {
+          Navigate(`/notes/${updatedNote.index}`);
+        } else {
+          Navigate(`/${updatedNote.index}`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const addHandler = () => {
@@ -204,51 +202,44 @@ function Layout() {
   const deleteHandler = async (id) => {
     const answer = window.confirm("Are you sure?");
     if (answer) {
-      try {
-        //_________
-        await axios
-          .delete(deleteNotesUrl, {
-            headers: {
-              "Access-Control-Allow-Origin": "*", // Required for CORS support to work
-              "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
-              access_token: user.access_token,
-              email: profile.email,
-              note_id: id,
-            },
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log("Error in Delete Handler: " + err);
+      await axios
+        .delete(deleteNotesUrl, {
+          headers: {
+            "Access-Control-Allow-Origin": "*", // Required for CORS support to work
+            "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
+            access_token: user.access_token,
+            email: profile.email,
+            note_id: id,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          const newNotes = notes.filter((note) => note.id !== id);
+
+          newNotes.forEach((note, index) => {
+            note.index = index + 1;
           });
-        //_________
 
-        const newNotes = notes.filter((note) => note.id !== id);
+          setNotes(newNotes);
 
-        newNotes.forEach((note, index) => {
-          note.index = index + 1;
+          if (newNotes.length !== 0) {
+            if (notesUrl) {
+              Navigate(`/notes/1`);
+            } else {
+              Navigate(`/1`);
+            }
+            setCurrNote(newNotes[0]);
+          } else {
+            if (notesUrl) {
+              Navigate("/notes");
+            } else {
+              Navigate("/");
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error in Delete Handler: " + err);
         });
-
-        setNotes(newNotes);
-
-        if (newNotes.length !== 0) {
-          if (notesUrl) {
-            Navigate(`/notes/1`);
-          } else {
-            Navigate(`/1`);
-          }
-          setCurrNote(newNotes[0]);
-        } else {
-          if (notesUrl) {
-            Navigate("/notes");
-          } else {
-            Navigate("/");
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
     }
   };
 
