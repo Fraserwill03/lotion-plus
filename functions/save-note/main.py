@@ -16,7 +16,4 @@ def save_handler(event, context):
             'body': json.dumps(event)
         }
     except Exception as e:
-        return {
-            'statusCode': 401,
-            'body': json.dumps('Error saving note: ' + str(e))
-        }
+        return {'statusCode': 401, 'body': json.dumps(f'Error saving note: {str(e)}')}
