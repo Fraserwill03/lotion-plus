@@ -15,7 +15,9 @@ def delete_handler(event, context):
 
         return {
             'statusCode': 200,
-            'body': json.dumps('Note deleted successfully')
+            'body': {'response': 'Note deleted successfully',
+                     'event': json.dump(event),
+                     }
         }
     except Exception as e:
         return {

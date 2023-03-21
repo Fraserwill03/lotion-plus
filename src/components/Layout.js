@@ -141,13 +141,18 @@ function Layout() {
   const saveHandler = async (updatedNote) => {
     try {
       axios
-        .post(saveNotesUrl, {
-          data: { new_note: updatedNote },
-          headers: {
-            access_token: user.access_token,
-            email: profile.email,
+        .post(
+          saveNotesUrl,
+          {
+            new_note: updatedNote,
           },
-        })
+          {
+            headers: {
+              access_token: user.access_token,
+              email: profile.email,
+            },
+          }
+        )
         .then((res) => {
           console.log(res.data);
         });
