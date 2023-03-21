@@ -37,8 +37,19 @@ function Layout() {
   const [user, setUser] = useState();
   const [profile, setProfile] = useState();
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("user");
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    }
+  }, []);
+
   const login = useGoogleLogin({
-    onSuccess: (codeResponse) => setUser(codeResponse),
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      localStorage.setItem("user", JSON.stringify(codeResponse));
+    },
     onError: (error) => console.log("Login failed: ", error),
   });
 
@@ -83,6 +94,8 @@ function Layout() {
   const logoutHandler = () => {
     googleLogout();
     setProfile(null);
+    setUser(null);
+    localStorage.removeItem("user");
   };
 
   useEffect(() => {
@@ -125,15 +138,19 @@ function Layout() {
     }
   };
 
-  const saveHandler = (updatedNote) => {
+  const saveHandler = async (updatedNote) => {
     try {
-      axios.post(saveNotesUrl, {
-        headers: {
-          access_token: user.access_token,
-          email: profile.email,
-          new_note: JSON.stringify(updatedNote),
-        },
-      });
+      axios
+        .post(saveNotesUrl, {
+          data: { new_note: updatedNote },
+          headers: {
+            access_token: user.access_token,
+            email: profile.email,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
 
       let noteIndex;
       for (let i = 0; i < notes.length; i++) {
@@ -160,7 +177,7 @@ function Layout() {
     }
   };
 
-  const addHandler = async () => {
+  const addHandler = () => {
     const newNote = {
       id: uuidv4(),
       title: "Untitled",
@@ -179,18 +196,25 @@ function Layout() {
     }
   };
 
-  const deleteHandler = (id) => {
+  const deleteHandler = async (id) => {
     const answer = window.confirm("Are you sure?");
     if (answer) {
       try {
         //_________
-        axios.delete(saveNotesUrl, {
-          headers: {
-            access_token: user.access_token,
-            email: profile.email,
-            note_id: id,
-          },
-        });
+        axios
+          .delete(saveNotesUrl, {
+            headers: {
+              access_token: user.access_token,
+              email: profile.email,
+              note_id: id,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log("Error in Delete Handler: " + err);
+          });
         //_________
 
         const newNotes = notes.filter((note) => note.id !== id);
