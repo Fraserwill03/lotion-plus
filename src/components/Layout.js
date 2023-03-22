@@ -98,12 +98,13 @@ function Layout() {
     googleLogout();
     setProfile(null);
     setUser(null);
+    setNotes([])
     localStorage.removeItem("user");
   };
 
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes, currNote]);
+  // useEffect(() => {
+  //   localStorage.setItem("notes", JSON.stringify(notes));
+  // }, [notes, currNote]);
 
   useEffect(() => {
     let noteExists = false;
@@ -278,7 +279,7 @@ function Layout() {
         profile={profile}
         logout={logoutHandler}
       />
-      {profile && notes ? (
+      {profile ? (
         <section className="main-section">
           {menu ? (
             <Menu

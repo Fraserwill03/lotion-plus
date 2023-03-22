@@ -25,28 +25,15 @@ def get_handler(event, context):
             }
 
         dynamodb = boto3.resource("dynamodb")
+        table = dynamodb.Table("lotion-30158991")
 
-
-        response = dynamodb.batch_get_item(
-            RequestItems={
-                'lotion-30158991': {
-                    'Keys': [
-                        {
-                            'email': email,
-                            'id': '*',
-                        }
-                    ],
-                    'ConsistentRead': True
-                }
-            },
-            ReturnConsumedCapacity='TOTAL'
+        response = table.query(
+            KeyConditionExpression=boto3.dynamodb.conditions.Key('email').eq(email)
         )
+
         return {
             'statusCode': 200,
-            'body': {'response': 'Note retreived successfully',
-                     'notes': json.dumps(response),
-                     }
-
+            'body': response
         }
     except Exception as e:
         return {
