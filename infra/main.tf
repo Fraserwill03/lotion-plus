@@ -60,6 +60,52 @@ resource "aws_iam_role" "lambda" {
 EOF
 }
 
+resource "aws_iam_policy" "dynamodb" {
+  name = "dynamodb-policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListAndDescribe",
+      "Effect": "Allow",
+      "Action": [
+          "dynamodb:List*",
+          "dynamodb:DescribeReservedCapacity*",
+          "dynamodb:DescribeLimits",
+          "dynamodb:DescribeTimeToLive"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "SpecificTable",
+      "Effect": "Allow",
+      "Action": [
+          "dynamodb:BatchGet*",
+          "dynamodb:DescribeStream",
+          "dynamodb:DescribeTable",
+          "dynamodb:Get*",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:BatchWrite*",
+          "dynamodb:CreateTable",
+          "dynamodb:Delete*",
+          "dynamodb:Update*",
+          "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:*:*:table/lotion-30158991"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "dynamoaccess" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = aws_iam_policy.dynamodb.arn
+}
+
 
 # create a Lambda function
 # see the docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function
@@ -109,13 +155,13 @@ resource "aws_dynamodb_table" "lotion-30158991" {
 
   # we only need a student id to find an item in the table; therefore, we 
   # don't need a sort key here
-  hash_key  = "access_token"
+  hash_key  = "email"
   range_key = "id"
 
 
   # the hash_key data type is string 
   attribute {
-    name = "access_token"
+    name = "email"
     type = "S"
   }
   attribute {
