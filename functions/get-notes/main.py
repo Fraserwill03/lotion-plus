@@ -2,6 +2,7 @@
 
 import json
 import boto3
+import requests
 
 
 def get_handler(event, context):
@@ -9,7 +10,20 @@ def get_handler(event, context):
         access_token = event['headers']['access_token']
         email_auth = event['headers']['email']
         email = event['queryStringParameters']['email']
-        #needs auth code
+        
+        auth_headers = {
+            "Authorization": access_token,
+            "Accept": "application/json",
+        }
+        auth_res = requests.get(f'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token={access_token}',
+                                headers=auth_headers)
+        auth_res = auth_res.json()
+        if auth_res['email'] != email_auth:
+            return {
+                'statusCode': 401,
+                'body': json.dumps('Unauthenticated request'),
+            }
+
         dynamodb = boto3.resource("dynamodb")
 
 
