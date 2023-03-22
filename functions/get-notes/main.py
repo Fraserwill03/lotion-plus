@@ -33,6 +33,7 @@ def get_handler(event, context):
                     'Keys': [
                         {
                             'email': email,
+                            'id': '*',
                         }
                     ],
                     'ConsistentRead': True

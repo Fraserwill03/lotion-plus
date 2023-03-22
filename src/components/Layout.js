@@ -146,7 +146,8 @@ function Layout() {
       .post(
         saveNotesUrl,
         {
-          new_note: updatedNote,
+          id: updatedNote.id,
+          note: updatedNote,  
         },
         {
           headers: {

@@ -3,6 +3,7 @@ import json
 import boto3
 
 
+
 def delete_handler(event, context):
     try:
         access_token = event['headers']['access_token']
