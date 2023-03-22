@@ -214,7 +214,10 @@ function Layout() {
             "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             access_token: user.access_token,
             email: profile.email,
-            note_id: id,
+          },
+          params: {
+            email: profile.email,
+            id: id,
           },
         })
         .then((res) => {
