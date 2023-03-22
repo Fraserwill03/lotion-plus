@@ -26,9 +26,9 @@ function Layout() {
   const [notesUrl, setNotesUrl] = useState(false);
 
   const [menu, setMenu] = useState(true);
-  const [notes, setNotes] = useState(
-    JSON.parse(localStorage.getItem("notes") || "[]")
-  );
+  const [notes, setNotes] = useState([]);
+
+  const [currIndex, setCurrIndex] = useState(index);
 
   const [currNote, setCurrNote] = useState(
     notes.find((note) => note.index === parseInt(index))
@@ -91,7 +91,6 @@ function Layout() {
             retrievedNotes.push(arr[i].note);
           }
           setNotes(retrievedNotes);
-          console.log(res.Items);
         })
         .catch((err) => {
           console.log(err);
@@ -109,6 +108,7 @@ function Layout() {
   };
 
   useEffect(() => {
+    console.log("REDIRECT USEEFFECT");
     let noteExists = false;
 
     for (let i = 0; i < notes.length; i++) {
@@ -145,7 +145,7 @@ function Layout() {
   };
 
   const saveHandler = async (updatedNote) => {
-    await axios
+    axios
       .post(
         saveNotesUrl,
         {
@@ -160,12 +160,6 @@ function Layout() {
         }
       )
       .then((res) => {
-        let noteIndex;
-        for (let i = 0; i < notes.length; i++) {
-          if (notes[i].id === updatedNote.id) {
-            noteIndex = i;
-          }
-        }
         setNotes(
           notes.map((note) => {
             if (note.id === updatedNote.id) {
@@ -208,7 +202,7 @@ function Layout() {
   const deleteHandler = async (id) => {
     const answer = window.confirm("Are you sure?");
     if (answer) {
-      await axios
+      axios
         .delete(deleteNotesUrl, {
           headers: {
             "Access-Control-Allow-Origin": "*", // Required for CORS support to work
