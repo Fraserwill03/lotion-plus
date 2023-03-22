@@ -85,20 +85,26 @@ function Layout() {
             },
           })
         .then((res) => {
-          // setNotes(res.data.notes); // might need to change this to parse data better
-          console.log(res.data);
+          let arr = res.data.Items;
+          let retrievedNotes = [];
+          for(let i = 0; i < arr.length; i++){
+            retrievedNotes.push(arr[i].note)
+          }      
+          setNotes(retrievedNotes);
+          console.log(res.Items);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [user, profile, notes]);
+  }, [user, profile]);
 
   const logoutHandler = () => {
     googleLogout();
     setProfile(null);
     setUser(null);
     setNotes([])
+    Navigate("/notes")
     localStorage.removeItem("user");
   };
 
