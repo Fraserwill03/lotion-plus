@@ -85,25 +85,28 @@ function Layout() {
           },
         })
         .then((res) => {
-          // setNotes(JSON.parse(res.data.notes)); // might need to change this to parse data better
-          console.log(JSON.parse(res.data.notes));
+          let arr = res.data.Items;
+          let retrievedNotes = [];
+          for (let i = arr.length - 1; i >= 0; i--) {
+            retrievedNotes.push(arr[i].note);
+          }
+          setNotes(retrievedNotes);
+          console.log(res.Items);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [user, profile, notes]);
+  }, [user, profile]);
 
   const logoutHandler = () => {
     googleLogout();
     setProfile(null);
     setUser(null);
+    setNotes([]);
+    Navigate("/notes");
     localStorage.removeItem("user");
   };
-
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes, currNote]);
 
   useEffect(() => {
     let noteExists = false;
@@ -142,11 +145,12 @@ function Layout() {
   };
 
   const saveHandler = async (updatedNote) => {
-    axios
+    await axios
       .post(
         saveNotesUrl,
         {
-          new_note: updatedNote,
+          id: updatedNote.id,
+          note: updatedNote,
         },
         {
           headers: {
@@ -156,7 +160,6 @@ function Layout() {
         }
       )
       .then((res) => {
-        console.log(res.data);
         let noteIndex;
         for (let i = 0; i < notes.length; i++) {
           if (notes[i].id === updatedNote.id) {
@@ -167,11 +170,11 @@ function Layout() {
           notes.map((note) => {
             if (note.id === updatedNote.id) {
               return updatedNote;
+            } else {
+              return note;
             }
-            return note;
           })
         );
-
         if (notesUrl) {
           Navigate(`/notes/${updatedNote.index}`);
         } else {
@@ -212,7 +215,10 @@ function Layout() {
             "Access-Control-Allow-Credentials": true, // Required for cookies, authorization headers with HTTPS
             access_token: user.access_token,
             email: profile.email,
-            note_id: id,
+          },
+          params: {
+            email: profile.email,
+            id: id,
           },
         })
         .then((res) => {
@@ -277,7 +283,7 @@ function Layout() {
         profile={profile}
         logout={logoutHandler}
       />
-      {profile && notes ? (
+      {profile ? (
         <section className="main-section">
           {menu ? (
             <Menu
