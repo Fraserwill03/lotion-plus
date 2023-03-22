@@ -25,6 +25,8 @@
   align-items: center;
   color: rgb(136, 138, 140);
   font-size: 1.5em;
+  padding: 0;
+  max-height: 100%;
 }
 
 .login-page {
