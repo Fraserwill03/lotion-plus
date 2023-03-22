@@ -15,8 +15,8 @@ function NoteCard(props) {
     >
       <div className="note-wrapper">
         <h3>
-          {note.title.length > 10
-            ? note.title.slice(0, 10) + "..."
+          {note.title.length > 25
+            ? note.title.slice(0, 25) + "..."
             : note.title}
         </h3>
         <p className="formatted-date">

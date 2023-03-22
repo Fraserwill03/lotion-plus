@@ -87,7 +87,7 @@ function Layout() {
         .then((res) => {
           let arr = res.data.Items;
           let retrievedNotes = [];
-          for(let i = 0; i < arr.length; i++){
+          for(let i = arr.length - 1; i >= 0; i--){
             retrievedNotes.push(arr[i].note)
           }      
           setNotes(retrievedNotes);
@@ -108,9 +108,6 @@ function Layout() {
     localStorage.removeItem("user");
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem("notes", JSON.stringify(notes));
-  // }, [notes, currNote]);
 
   useEffect(() => {
     let noteExists = false;
@@ -148,8 +145,8 @@ function Layout() {
     }
   };
 
-  const saveHandler = async (updatedNote) => {
-    await axios
+  function saveHandler(updatedNote) {
+    axios
       .post(
         saveNotesUrl,
         {
@@ -164,7 +161,6 @@ function Layout() {
         }
       )
       .then((res) => {
-        console.log(res.data);
         let noteIndex;
         for (let i = 0; i < notes.length; i++) {
           if (notes[i].id === updatedNote.id) {
@@ -175,11 +171,11 @@ function Layout() {
           notes.map((note) => {
             if (note.id === updatedNote.id) {
               return updatedNote;
+            } else {
+              return note;
             }
-            return note;
           })
         );
-
         if (notesUrl) {
           Navigate(`/notes/${updatedNote.index}`);
         } else {
@@ -190,6 +186,7 @@ function Layout() {
         console.log(err);
       });
   };
+  
 
   const addHandler = () => {
     const newNote = {

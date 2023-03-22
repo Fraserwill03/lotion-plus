@@ -5,6 +5,7 @@
   flex-direction: column;
   max-height: 100%;
   flex: 1;
+  max-width: 400px;
 }
 
 .mini-header {
@@ -41,7 +42,7 @@
   height: 100%;
   justify-content: center;
   align-items: center;
-  width: 30px;
+  width: 50px;
 }
 
 .add:hover {
