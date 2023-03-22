@@ -79,14 +79,14 @@ function Layout() {
           headers: {
             access_token: user.access_token,
             email: profile.email,
-            },
+          },
           params: {
             email: profile.email,
-            },
-          })
+          },
+        })
         .then((res) => {
-          // setNotes(res.data.notes); // might need to change this to parse data better
-          console.log(res.data);
+          // setNotes(JSON.parse(res.data.notes)); // might need to change this to parse data better
+          console.log(JSON.parse(res.data.notes));
         })
         .catch((err) => {
           console.log(err);
@@ -142,7 +142,7 @@ function Layout() {
   };
 
   const saveHandler = async (updatedNote) => {
-    await axios
+    axios
       .post(
         saveNotesUrl,
         {

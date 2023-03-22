@@ -10,7 +10,7 @@ def get_handler(event, context):
         access_token = event['headers']['access_token']
         email_auth = event['headers']['email']
         email = event['queryStringParameters']['email']
-        
+
         auth_headers = {
             "Authorization": access_token,
             "Accept": "application/json",
@@ -25,7 +25,6 @@ def get_handler(event, context):
             }
 
         dynamodb = boto3.resource("dynamodb")
-
 
         response = dynamodb.batch_get_item(
             RequestItems={
