@@ -1,5 +1,6 @@
 .note-wrapper {
   padding: 10px;
+  border-bottom: solid 1px #c3c2c4;
 }
 
 .note:hover {
