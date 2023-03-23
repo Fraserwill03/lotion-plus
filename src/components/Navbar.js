@@ -5,8 +5,8 @@ function Navbar(props) {
   const {menuHandler, profile, logout} = props;
   return (
     <nav>
-      <div className="wrapper" onClick={menuHandler}>
-        <div className="burger"> &#9776;</div>
+      <div className="wrapper">
+        <div className="burger" onClick={menuHandler}> &#9776;</div>
       </div>
 
       <div className="title">
