@@ -1,3 +1,3 @@
 Drop your Netlify application address here.
 
-[Lotion](https://incomparable-conkies-9d4ecd.netlify.app/)
+[Lotion](https://641c70a454df84005bb413d5--lotion-aws.netlify.app/)
