@@ -18,35 +18,43 @@ function Viewer() {
   ] = useOutletContext();
   return (
     <section className="viewer">
-      <div className="header-section viewer-header">
-        <div className="input-block">
-          <h2>
-            {currNote.title.length < 20
-              ? currNote.title
-              : currNote.title.slice(0, 17) + "..."}
-          </h2>
-
-          <p className="formatted-date">{formatDate(currNote.time)}</p>
+      {!currNote ? (
+        <div id="content" className="menu-spacer">
+          Select a note, or create a new one
         </div>
-        <div className="btns">
-          <div className="btn" onClick={() => editHandler(currNote)}>
-            Edit
-          </div>
-          <div className="btn" onClick={() => deleteHandler(currNote.id)}>
-            Delete
-          </div>
-        </div>
-      </div>
+      ) : (
+        <div>
+          <div className="header-section viewer-header">
+            <div className="input-block">
+              <h2>
+                {currNote.title.length < 20
+                  ? currNote.title
+                  : currNote.title.slice(0, 17) + "..."}
+              </h2>
 
-      <ReactQuill
-        className="quill"
-        theme="snow"
-        value={currNote.content}
-        readOnly={true}
-        modules={{
-          toolbar: null,
-        }}
-      />
+              <p className="formatted-date">{formatDate(currNote.time)}</p>
+            </div>
+            <div className="btns">
+              <div className="btn" onClick={() => editHandler(currNote)}>
+                Edit
+              </div>
+              <div className="btn" onClick={() => deleteHandler(currNote.id)}>
+                Delete
+              </div>
+            </div>
+          </div>
+
+          <ReactQuill
+            className="quill"
+            theme="snow"
+            value={currNote.content}
+            readOnly={true}
+            modules={{
+              toolbar: null,
+            }}
+          />
+        </div>
+      )}
     </section>
   );
 }

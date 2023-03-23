@@ -63,48 +63,56 @@ function Editor() {
 
   return (
     <section className="editor">
-      <div className="header-section">
-        <div className="input-block">
-          <input
-            className="title-input"
-            type="text"
-            onChange={(e) => {
-              setCurrNote({
-                ...currNote,
-                title: e.target.value,
-              });
-            }}
-            value={currNote.title}
-          />
+      {!currNote ? (
+        <div id="content" className="menu-spacer">
+          Select a note, or create a new one
+        </div>
+      ) : (
+        <div>
+          <div className="header-section">
+            <div className="input-block">
+              <input
+                className="title-input"
+                type="text"
+                onChange={(e) => {
+                  setCurrNote({
+                    ...currNote,
+                    title: e.target.value,
+                  });
+                }}
+                value={currNote.title}
+              />
 
-          <input
-            className="date-input"
-            type="datetime-local"
-            onChange={(e) => {
-              setCurrNote({
-                ...currNote,
-                time: convertLocaltoDate(e.target.value),
-              });
-            }}
-            value={convertDatetoLocal(currNote.time)}
+              <input
+                className="date-input"
+                type="datetime-local"
+                onChange={(e) => {
+                  setCurrNote({
+                    ...currNote,
+                    time: convertLocaltoDate(e.target.value),
+                  });
+                }}
+                value={convertDatetoLocal(currNote.time)}
+              />
+            </div>
+            <div className="btns">
+              <div className="btn" onClick={() => saveHandler(currNote)}>
+                Save
+              </div>
+              <div className="btn" onClick={() => deleteHandler(currNote.id)}>
+                Delete
+              </div>
+            </div>
+          </div>
+
+          <ReactQuill
+            className="quill"
+            theme="snow"
+            onChange={onChangeHandler}
+            value={currNote.content}
           />
         </div>
-        <div className="btns">
-          <div className="btn" onClick={() => saveHandler(currNote)}>
-            Save
-          </div>
-          <div className="btn" onClick={() => deleteHandler(currNote.id)}>
-            Delete
-          </div>
-        </div>
-      </div>
-
-      <ReactQuill
-        className="quill"
-        theme="snow"
-        onChange={onChangeHandler}
-        value={currNote.content}
-      />
+      )}
     </section>
   );
 }

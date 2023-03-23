@@ -2,12 +2,9 @@ import { useState, React, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import { v4 as uuidv4 } from "uuid";
-
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-
 import Menu from "./Menu";
 import "../components/Layout.css";
 
@@ -24,16 +21,10 @@ function Layout() {
   const location = useLocation();
 
   const [notesUrl, setNotesUrl] = useState(false);
-
   const [menu, setMenu] = useState(true);
   const [notes, setNotes] = useState([]);
-
-  const [currIndex, setCurrIndex] = useState(index);
-
-  const [currNote, setCurrNote] = useState(
-    notes.find((note) => note.index === parseInt(index))
-  );
-
+  const [contentLoaded, setContentLoaded] = useState(false);
+  const [currNote, setCurrNote] = useState(null);
   const [user, setUser] = useState();
   const [profile, setProfile] = useState();
 
@@ -91,6 +82,8 @@ function Layout() {
             retrievedNotes.push(arr[i].note);
           }
           setNotes(retrievedNotes);
+          setContentLoaded(true);
+          setCurrNote(notes.find((note) => note.index === parseInt(index)));
         })
         .catch((err) => {
           console.log(err);
@@ -108,27 +101,28 @@ function Layout() {
   };
 
   useEffect(() => {
-    console.log("REDIRECT USEEFFECT");
-    let noteExists = false;
+    if (contentLoaded) {
+      let noteExists = false;
 
-    for (let i = 0; i < notes.length; i++) {
-      if (notes[i].index === parseInt(index)) {
-        noteExists = true;
+      for (let i = 0; i < notes.length; i++) {
+        if (notes[i].index === parseInt(index)) {
+          noteExists = true;
+        }
       }
-    }
-    if (noteExists === false) {
-      if (notesUrl) {
-        Navigate("/notes");
+      if (noteExists === false) {
+        if (notesUrl) {
+          Navigate("/notes");
+        } else {
+          Navigate("/");
+        }
+      }
+      if (location.pathname.includes("notes")) {
+        setNotesUrl(true);
       } else {
-        Navigate("/");
+        setNotesUrl(false);
       }
     }
-    if (location.pathname.includes("notes")) {
-      setNotesUrl(true);
-    } else {
-      setNotesUrl(false);
-    }
-  }, [index]);
+  }, [index, contentLoaded]);
 
   const menuHandler = () => {
     setMenu(!menu);
@@ -271,57 +265,60 @@ function Layout() {
   };
 
   return (
-    <div className="layout">
-      <Navbar
-        menuHandler={menuHandler}
-        profile={profile}
-        logout={logoutHandler}
-      />
-      {profile ? (
-        <section className="main-section">
-          {menu ? (
-            <Menu
-              selectHandler={selectHandler}
-              notes={notes}
-              setNotes={setNotes}
-              formatDate={formatDate}
-              index={index}
-              addHandler={addHandler}
-            />
-          ) : null}
+    console.log("RENDER, currnote: " + currNote),
+    (
+      <div className="layout">
+        <Navbar
+          menuHandler={menuHandler}
+          profile={profile}
+          logout={logoutHandler}
+        />
+        {profile ? (
+          <section className="main-section">
+            {menu ? (
+              <Menu
+                selectHandler={selectHandler}
+                notes={notes}
+                setNotes={setNotes}
+                formatDate={formatDate}
+                index={index}
+                addHandler={addHandler}
+              />
+            ) : null}
 
-          <div className="content-wrapper">
-            <div id="content">
-              <Outlet
-                context={[
-                  notes,
-                  setNotes,
-                  formatDate,
-                  saveHandler,
-                  deleteHandler,
-                  currNote,
-                  setCurrNote,
-                  index,
-                  editHandler,
-                ]}
+            <div className="content-wrapper">
+              <div id="content">
+                <Outlet
+                  context={[
+                    notes,
+                    setNotes,
+                    formatDate,
+                    saveHandler,
+                    deleteHandler,
+                    currNote,
+                    setCurrNote,
+                    index,
+                    editHandler,
+                  ]}
+                />
+              </div>
+            </div>
+          </section>
+        ) : (
+          <section className="login-page">
+            <div className="login" onClick={() => login()}>
+              Sign in to Lotion with{" "}
+              <img
+                src="https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png"
+                alt="Colorful Google Logo transparent clipart"
+                width={40}
+                height={40}
               />
             </div>
-          </div>
-        </section>
-      ) : (
-        <section className="login-page">
-          <div className="login" onClick={() => login()}>
-            Sign in to Lotion with{" "}
-            <img
-              src="https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png"
-              alt="Colorful Google Logo transparent clipart download @transparentpng.com"
-              width={40}
-              height={40}
-            />
-          </div>
-        </section>
-      )}
-    </div>
+          </section>
+        )}
+      </div>
+    )
   );
 }
 
