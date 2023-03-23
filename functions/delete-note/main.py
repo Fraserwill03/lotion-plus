@@ -4,7 +4,6 @@ import boto3
 import requests
 
 
-
 def delete_handler(event, context):
 
     try:
@@ -12,7 +11,7 @@ def delete_handler(event, context):
         email_auth = event['headers']['email']
         email = event['queryStringParameters']['email']
         note_id = event['queryStringParameters']['id']
-        
+
         auth_headers = {
             "Authorization": access_token,
             "Accept": "application/json",

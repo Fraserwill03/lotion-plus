@@ -80,13 +80,13 @@ function Layout() {
           let retrievedNotes = [];
           let j = 1;
           for (let i = arr.length - 1; i >= 0; i--) {
-            const note ={
-            id : arr[i].id,
-            title : arr[i].title,
-            time : arr[i].when,
-            content : arr[i].body,
-            index : j,
-            }
+            const note = {
+              id: arr[i].id,
+              title: arr[i].title,
+              time: arr[i].when,
+              content: arr[i].body,
+              index: j,
+            };
             j++;
             retrievedNotes.push(note);
           }
@@ -200,22 +200,21 @@ function Layout() {
     } else {
       Navigate(`/${newNote.index}/edit`);
     }
-    axios
-      .post(
-        saveNotesUrl,
-        {
-          id: newNote.id,
-          body: newNote.content,
-          title: newNote.title,
-          when: newNote.time,
+    axios.post(
+      saveNotesUrl,
+      {
+        id: newNote.id,
+        body: newNote.content,
+        title: newNote.title,
+        when: newNote.time,
+      },
+      {
+        headers: {
+          access_token: user.access_token,
+          email: profile.email,
         },
-        {
-          headers: {
-            access_token: user.access_token,
-            email: profile.email,
-          },
-        }
-    )
+      }
+    );
   };
 
   const deleteHandler = async (id) => {
@@ -332,12 +331,12 @@ function Layout() {
         ) : (
           <section className="login-page">
             <div className="login" onClick={() => login()}>
-              Sign in to Lotion with{" "}
+              Sign in to Lotion with&nbsp;&nbsp;
               <img
-                src="https://www.transparentpng.com/thumb/google-logo/colorful-google-logo-transparent-clipart-download-u3DWLj.png"
+                src="/Google-Logo.png"
                 alt="Colorful Google Logo transparent clipart"
-                width={40}
-                height={40}
+                width={25}
+                height={25}
               />
             </div>
           </section>
