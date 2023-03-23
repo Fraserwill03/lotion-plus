@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Editor from "./components/Editor";
-import Viewer from "./components/Viewer";
 import "./App.css";
 
 function App() {
@@ -21,7 +20,7 @@ function App() {
             path="/notes/:index"
             element={
               <div id="content">
-                <Viewer />
+                <Editor edit={false} />
               </div>
             }
           ></Route>
@@ -45,7 +44,7 @@ function App() {
             path="/:index"
             element={
               <div id="content">
-                <Viewer />
+                <Editor edit={false} />
               </div>
             }
           ></Route>
