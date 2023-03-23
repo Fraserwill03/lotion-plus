@@ -78,8 +78,17 @@ function Layout() {
         .then((res) => {
           let arr = res.data.Items;
           let retrievedNotes = [];
+          let j = 1;
           for (let i = arr.length - 1; i >= 0; i--) {
-            retrievedNotes.push(arr[i].note);
+            const note ={
+            id : arr[i].id,
+            title : arr[i].title,
+            time : arr[i].when,
+            content : arr[i].body,
+            index : j,
+            }
+            j++;
+            retrievedNotes.push(note);
           }
           setNotes(retrievedNotes);
           setContentLoaded(true);
@@ -144,7 +153,9 @@ function Layout() {
         saveNotesUrl,
         {
           id: updatedNote.id,
-          note: updatedNote,
+          body: updatedNote.content,
+          title: updatedNote.title,
+          when: updatedNote.time,
         },
         {
           headers: {
@@ -174,7 +185,7 @@ function Layout() {
       });
   };
 
-  const addHandler = () => {
+  const addHandler = async () => {
     const newNote = {
       id: uuidv4(),
       title: "Untitled",
@@ -182,15 +193,29 @@ function Layout() {
       content: "",
       index: notes.length + 1,
     };
-
     setNotes([...notes, newNote]);
     setCurrNote(newNote);
-
     if (notesUrl) {
       Navigate(`/notes/${newNote.index}/edit`);
     } else {
       Navigate(`/${newNote.index}/edit`);
     }
+    axios
+      .post(
+        saveNotesUrl,
+        {
+          id: newNote.id,
+          body: newNote.content,
+          title: newNote.title,
+          when: newNote.time,
+        },
+        {
+          headers: {
+            access_token: user.access_token,
+            email: profile.email,
+          },
+        }
+    )
   };
 
   const deleteHandler = async (id) => {

@@ -25,7 +25,7 @@ def save_handler(event, context):
                 'body': json.dumps('Unauthenticated request'),
             }
 
-        instance_to_save = {'email': email, 'id': note_data['id'], 'note': note_data['note']}
+        instance_to_save = {'email': email, 'id': note_data['id'], 'body': note_data['body'], 'title': note_data['title'], 'when': note_data['when']}
 
         dynamodb_resource = boto3.resource('dynamodb')
         table = dynamodb_resource.Table("lotion-30158991")
