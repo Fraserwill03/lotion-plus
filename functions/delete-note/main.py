@@ -33,7 +33,7 @@ def delete_handler(event, context):
         )
 
         return {
-            'statusCode': 200,
+            'statusCode': 201,
             'body': response
         }
     except Exception as e:
