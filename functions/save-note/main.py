@@ -34,7 +34,7 @@ def save_handler(event, context):
         )
 
         return {
-            'statusCode': 200,
+            'statusCode': 201,
             'body': {'response': f'Note saved successfully. Response: {response}'
                      }
         }
